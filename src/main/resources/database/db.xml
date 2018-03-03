@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-bean-3.2.xsd">
+
+    <!--<context:property-placeholder location=""/>与$结合-->
+    <!--引入数据库的参数配置-->
+    <bean id="dbProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:database/db.properties"/>
+    </bean>
+
+    <!--数据库连接池-->
+    <!--#与$的区别-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="#{dbProperties.driverClassName}"/>
+        <property name="url" value="#{dbProperties.url}"/>
+        <property name="username" value="#{dbProperties.username}"/>
+        <property name="password" value="#{dbProperties.password}"/>
+    </bean>
+
+    <!--sqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--数据库连接池-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--myabatis的配置文件-->
+        <property name="configLocation" value="classpath:mybatis/sqlConfig.xml"/>
+    </bean>
+
+
+    <!--配置mybatis扫描mapper接口路径，相当于注解@MapperScan-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.zgb.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+</beans>
