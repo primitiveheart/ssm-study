@@ -16,4 +16,8 @@
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO user (name, age) VALUES (#{name}, #{age})
     </insert>
+
+    <select id="getUserByName" parameterType="String" resultMap="result">
+        SELECT <include refid="sqlColumnList"/> FROM user WHERE name = #{name}
+    </select>
 </mapper>

@@ -7,4 +7,6 @@ import com.zgb.entity.User;
  */
 public interface UserMapper {
     void insertUser(User user);
+
+    User getUserByName(String name);
 }
